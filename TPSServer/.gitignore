@@ -1,2 +1,13 @@
 .idea
 venv
+*.pyc
+.idea/
+*.egg-info/
+*kittylogs*
+venv
+.vscode
+fuzz.log
+test.py
+pcap/
+dist
+.vs

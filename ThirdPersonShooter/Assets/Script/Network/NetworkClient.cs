@@ -83,4 +83,9 @@ public class NetworkClient
     {
 
     }
+
+    public bool IsLocalId(int id)
+    {
+        return id == conn.clientID;
+    }
 }

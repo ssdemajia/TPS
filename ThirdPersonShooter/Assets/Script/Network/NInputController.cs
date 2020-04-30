@@ -34,6 +34,11 @@ public class NInputController
         }
     }
 
+    internal NClientInput getClientInput(int clientID)
+    {
+        return this._inputs[clientID];
+    }
+
     public void Init(NetworkClient client)
     {
         _client = client;
