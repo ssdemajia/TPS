@@ -8,12 +8,10 @@
 #=========================================================================
 
 import sys
-sys.path.append('../common')
-
-import conf
 import errno
 import socket
 import struct
+from server.common import conf
 
 
 class NetStream(object):
@@ -37,7 +35,7 @@ class NetStream(object):
 	# connect the remote server
 	def connect(self, address, port):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.sock.setblocking(0)
+		self.sock.setblocking(False)
 		self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 		self.sock.connect_ex((address, port))
 		self.state = conf.NET_STATE_CONNECTING
@@ -99,9 +97,9 @@ class NetStream(object):
 		return 0
 
 	def __tryConnect(self):
-		if (self.state == conf.NET_STATE_ESTABLISHED):
+		if self.state == conf.NET_STATE_ESTABLISHED:
 			return 1
-		if (self.state != conf.NET_STATE_CONNECTING):
+		if self.state != conf.NET_STATE_CONNECTING:
 			return -1
 		try:
 			self.sock.recv(0)
@@ -138,7 +136,7 @@ class NetStream(object):
 	# send data from send_buf until block (reached system buffer limit)
 	def __trySend(self):
 		wsize = 0
-		if (len(self.send_buf) == 0):
+		if len(self.send_buf) == 0:
 			return 0
 
 		try:
@@ -156,11 +154,11 @@ class NetStream(object):
 	# recv an entire message from recv_buf
 	def recv(self):
 		rsize = self.__peekRaw(conf.NET_HEAD_LENGTH_SIZE)
-		if (len(rsize) < conf.NET_HEAD_LENGTH_SIZE):
+		if len(rsize) < conf.NET_HEAD_LENGTH_SIZE:
 			return ''
 
 		size = struct.unpack(conf.NET_HEAD_LENGTH_FORMAT, rsize)[0]
-		if (len(self.recv_buf) < size):
+		if len(self.recv_buf) < size:
 			return ''
 
 		self.__recvRaw(conf.NET_HEAD_LENGTH_SIZE)

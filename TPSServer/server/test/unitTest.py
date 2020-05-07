@@ -107,18 +107,18 @@ class ServerTest(unittest.TestCase):
 			
 			if event == conf.NET_CONNECTION_DATA:
 				client_stat, message = cPickle.loads(data)
-				host.sendClient(wparam, 'RE: ' + message)
+				host.send_client(wparam, 'RE: ' + message)
 				if client_stat == 1:
 					self.assertEqual(message, 'Hello, world !!')
 				elif client_stat == 2:
 					self.assertEqual(message, 'exit')
-					host.closeClient(wparam)
+					host.close_client(wparam)
 
 					host.shutdown()
 					break
 
 		# test timer
-		TimerManager.addRepeatTimer(0.15, self.addCount)
+		TimerManager.add_repeat_timer(0.15, self.addCount)
 		last = time.time()
 		while 1:
 			time.sleep(0.01)

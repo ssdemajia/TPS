@@ -1,44 +1,36 @@
 # -*- coding: GBK -*-
 
 import sys
-sys.path.append('./common')
-
+from server.common import conf
 from network.simpleHost import SimpleHost
 from dispatcher import Dispatcher
 
 
 class SimpleServer(object):
-	
-	def __init__(self):
-		super(SimpleServer, self).__init__()
 
-		self.entities = {}
-		self.host = SimpleHost()
-		self.dispatcher = Dispatcher()
+    def __init__(self):
+        super(SimpleServer, self).__init__()
 
-		return
+        self.entities = {}
+        self.host = SimpleHost()
+        self.dispatcher = Dispatcher()
 
-	def generateEntityID(self):
-		raise NotImplementedError
+    def generate_entity_id(self):
+        raise NotImplementedError
 
-	def registerEntity(self, entity):
-		eid = self.generateEntityID
-		entity.id = eid
+    def register_entity(self, entity):
+        eid = self.generate_entity_id
+        entity.id = eid
+        self.entities[eid] = entity
+        return
 
-		self.entities[eid] = entity
+    def tick(self):
+        self.host.process()
 
-		return
+        for eid, entity in self.entities.iteritems():
+            # Note: you can not delete entity in tick.
+            # you may cache delete items and delete in next frame
+            # or just use items.
+            entity.tick()
 
-	def tick(self):
-		self.host.process()
-
-		for eid, entity in self.entities.iteritems():
-			# Note: you can not delete entity in tick.
-			# you may cache delete items and delete in next frame
-			# or just use items.
-			entity.tick()
-
-		return
-
-
-
+        return

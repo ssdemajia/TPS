@@ -53,7 +53,7 @@ class TimerManager(object):
 	cancelled_num = 0
 	
 	@staticmethod
-	def addTimer(delay, func, *args, **kwargs):
+	def add_timer(delay, func, *args, **kwargs):
 		timer = CallLater(delay, func, *args, **kwargs)
 		
 		heapq.heappush(TimerManager.tasks, timer)
@@ -61,7 +61,7 @@ class TimerManager(object):
 		return timer
 	
 	@staticmethod
-	def addRepeatTimer(delay, func, *args, **kwargs):
+	def add_repeat_timer(delay, func, *args, **kwargs):
 		timer = CallEvery(delay, func, *args, **kwargs)
 		
 		heapq.heappush(TimerManager.tasks, timer)
@@ -88,19 +88,19 @@ class TimerManager(object):
 				
 	@staticmethod
 	def cancel(timer):
-		if not timer in TimerManager.tasks:
+		if timer not in TimerManager.tasks:
 			return
 		
 		timer.cancel()
 		TimerManager.cancelled_num += 1
 		
 		if float(TimerManager.cancelled_num)/len(TimerManager.tasks) > 0.25:
-			TimerManager.removeCancelledTasks()
+			TimerManager.remove_cancelled_tasks()
 		
 		return
 	
 	@staticmethod
-	def removeCancelledTasks():
+	def remove_cancelled_tasks():
 		print 'remove cancelled tasks'
 		tmp_tasks = []
 		for t in TimerManager.tasks:

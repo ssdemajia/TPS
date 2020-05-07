@@ -12,21 +12,21 @@ class Header(object):
 		self.htype = htype
 		self.hfmt = self.BYTES_ORDER + 'H'
 		
-		#bfmt to be defined in subclass and be updated when recieve new data
+		# bfmt to be defined in subclass and be updated when recieve new data
 		self.bfmt = None
 		self.raw = ''
 
 		self.char_for_len = 'I'
 		self.offset = struct.calcsize(self.BYTES_ORDER + self.char_for_len)
 	
-	def getFormat(self, raw):
+	def get_format(self, raw):
 		x = self.bfmt.count('%')
 		if x == 0:
 			return self.bfmt
 
 		begin, elen, lst, fmt = 0, 0, [], self.bfmt
 		self.offset = struct.calcsize(self.BYTES_ORDER + self.char_for_len)
-		for i in xrange(x) :
+		for i in xrange(x):
 			end = fmt.index('%', begin)
 			elen = elen + struct.calcsize(self.BYTES_ORDER + fmt[begin:end])
 			s = struct.unpack(self.BYTES_ORDER + self.char_for_len, raw[elen - self.offset:elen])[0]
@@ -34,8 +34,8 @@ class Header(object):
 			lst.append(s)
 			begin = end + len('%ds') 
 
-		if elen != 0 :
-			return fmt%tuple(lst)
+		if elen != 0:
+			return fmt % tuple(lst)
 
 	def marshal(self):
 		self.raw = struct.pack(self.hfmt, self.htype)
@@ -61,7 +61,7 @@ class Header(object):
 			raise TypeError('type dismatch when unmarshal.expect:%d,actual:%d'\
 							%(self.htype,record[0]))
 
-		bfmt = self.BYTES_ORDER + self.getFormat(self.raw[i:])
+		bfmt = self.BYTES_ORDER + self.get_format(self.raw[i:])
 		record = struct.unpack(bfmt, self.raw[i:])
 		self.iunmarshal(record)
 		return self
@@ -78,7 +78,7 @@ class SimpleHeader(Header):
 		self.bfmt = ''
 		self.params_name = []
 	
-	def appendParam(self, pname, pvalue, ptype):
+	def append_param(self, pname, pvalue, ptype):
 		# string param should be stored in length+data
 		# so we append None pname
 		if ptype.strip() == 's':
