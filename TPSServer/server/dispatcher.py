@@ -1,4 +1,5 @@
 # -*- coding: GBK -*-
+from server.common.packet import Packet
 
 
 class Service(object):
@@ -31,13 +32,19 @@ class Dispatcher(object):
 
         self.__service_map = {}
 
-    def dispatch(self, msg, owner):
-        sid = msg.sid
-        if sid not in self.__service_map:
-            raise Exception('bad service %d' % sid)
+    def dispatch(self, data, owner):
+        """
+        消息派发
+        :param data: 原始数据
+        :param owner: 接收的客户端
+        """
+        p = Packet(data)
+        opcode = p.get_int16()
+        if opcode not in self.__service_map:
+            raise Exception('bad opcode %d' % opcode)
 
-        svc = self.__service_map[sid]
-        return svc.handle(msg, owner)
+        svc = self.__service_map[opcode]
+        return svc.handle(opcode, p, owner)
 
-    def register(self, sid, svc):
-        self.__service_map[sid] = svc
+    def register(self, opecode, handle):
+        self.__service_map[opecode] = handle

@@ -2,7 +2,7 @@
 import socket
 import threading
 from packet import Packet
-import msg_type
+import message
 import struct
 
 
@@ -26,7 +26,7 @@ class Client:
         client_id = self.id
         print'玩家[%d]->初始化报文' % client_id
         p = Packet()
-        p.push_byte(msg_type.INIT)
+        p.push_byte(message.INIT)
         p.push_byte(client_id)
         self.send_frame(p.byte_list)
 
@@ -96,9 +96,9 @@ class TPSServer:
         p = Packet(msg)
         frame_type = p.get_byte()
         frame = p.get_remain()
-        if frame_type == msg_type.FRAME:
+        if frame_type == message.FRAME:
             client.frame = frame
-        elif frame_type == msg_type.LOGIN:
+        elif frame_type == message.LOGIN:
             pass
 
     def send_all_frames(self, client_id):
@@ -115,7 +115,7 @@ class TPSServer:
         """
         # print('玩家数[%d],' % len(self.clients))
         p = Packet()
-        p.push_byte(msg_type.FRAME)
+        p.push_byte(message.FRAME)
         length = len(self.clients)
         p.push_byte(length)
         for client_id, client in self.clients.items():

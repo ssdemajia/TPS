@@ -1,10 +1,10 @@
 # -*- coding: GBK -*-
+MSG_JOIN_ROOM = 0
+MSG_QUIT_ROOM = 1
+MSG_PLAYER_INPUT = 2
+MSG_START_GAME = 3
+MSG_FRAME_INPUT = 4
 
-MSG_CS_LOGIN = 0x1001
-MSG_SC_CONFIRM = 0x2001
-
-MSG_CS_MOVETO = 0x1002
-MSG_SC_MOVETO = 0x2002
 
 NET_STATE_STOP = 0  # state: init value  连接已经关闭
 NET_STATE_CONNECTING = 1  # state: connecting  正在通信

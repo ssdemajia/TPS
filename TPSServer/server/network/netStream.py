@@ -26,8 +26,7 @@ class NetStream(object):
 		self.errd = (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK)
 		self.conn = (errno.EISCONN, 10057, 10053)
 		self.errc = 0
-		
-		return
+		self.player_info = None  # 在用户join后，保存用户信息
 
 	def status(self):
 		return self.state
@@ -83,7 +82,7 @@ class NetStream(object):
 
 		return 0
 
-	# update
+	# 处理对应状态下的请求
 	def process(self):
 		if self.state == conf.NET_STATE_STOP:
 			return 0

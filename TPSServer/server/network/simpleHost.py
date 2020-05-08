@@ -75,7 +75,7 @@ class SimpleHost(object):
 
         return
 
-    # start listen
+    # 启动监听
     def startup(self, port=0):
         self.shutdown()
 
@@ -94,7 +94,7 @@ class SimpleHost(object):
         self.sock.setblocking(False)
         self.port = self.sock.getsockname()[1]
         self.state = conf.NET_STATE_ESTABLISHED
-
+        print(u'服务器启动，监听端口%d' % self.port)
         return 0
 
     def get_client(self, hid):
@@ -137,6 +137,11 @@ class SimpleHost(object):
         return client.nodelay(nodelay)
 
     def handle_new_client(self, current):
+        """
+
+        :param current: 当前时间
+        :return:
+        """
         sock = None
         try:
             sock, remote = self.sock.accept()
@@ -173,12 +178,12 @@ class SimpleHost(object):
                 continue
 
             client.process()
-            while client.status() == conf.NET_STATE_ESTABLISHED:
+            while client.status() == conf.NET_STATE_ESTABLISHED:  # 接收数据
                 data = client.recv()
                 if data == '':
                     break
                 self.queue.append((conf.NET_CONNECTION_DATA, client.hid, data))
-                client.active = current
+                client.active = current  # 更新时间
 
             timeout = current - client.active
             if (client.status() == conf.NET_STATE_STOP) or (timeout >= self.timeout):
@@ -190,7 +195,7 @@ class SimpleHost(object):
 
         return
 
-    # update: process clients and handle accepting
+    # 处理客户端信息以及接收新的连接请求
     def process(self):
         current = time.time()
         if self.state != conf.NET_STATE_ESTABLISHED:
