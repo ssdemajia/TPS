@@ -382,14 +382,13 @@ GameObject:
   - component: {fileID: 1145724030200252046}
   - component: {fileID: 964374652507763877}
   - component: {fileID: 2935706213678607740}
-  - component: {fileID: 3530410609177508543}
   m_Layer: 8
   m_Name: PlayerNetwork
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4250072732283736994
 Transform:
   m_ObjectHideFlags: 0
@@ -397,8 +396,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014156829182948868}
-  m_LocalRotation: {x: -0, y: 0.9910437, z: -0, w: -0.13353807}
-  m_LocalPosition: {x: -2.21, y: 1, z: -17.76}
+  m_LocalRotation: {x: 0, y: 0.991044, z: -0, w: -0.13353635}
+  m_LocalPosition: {x: -2.21, y: 9.4, z: -17.81}
   m_LocalScale: {x: 1, y: 1, z: 1.0014}
   m_Children:
   - {fileID: 6000531235812789096}
@@ -425,7 +424,7 @@ MonoBehaviour:
   MouseControl:
     Damping: {x: 3.27, y: 3.27}
     Sensitivity: {x: 5, y: 4}
-    LockMouse: 1
+    LockMouse: 0
   crosshair: {fileID: 2075553356635179814}
 --- !u!114 &3799704009010788016
 MonoBehaviour:
@@ -482,46 +481,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2.7
+  m_Height: 4.65
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.58, z: 0}
---- !u!114 &3530410609177508543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1014156829182948868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!1 &1016910859718962296
 GameObject:
   m_ObjectHideFlags: 0

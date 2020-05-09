@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class EnemyHealth : Destructable
 {
-    [SerializeField] Ragdoll ragdoll;
+    //[SerializeField] Ragdoll ragdoll;
 
-    public override void Die()
-    {
-        base.Die();
+    //public override void Die()
+    //{
+    //    base.Die();
         
-        ragdoll.EnableRagdoll(false);
-        GameManager.Instance.EventBus.RaiseEvent("EnemyDeath");
-    }
+    //    ragdoll.EnableRagdoll(false);
+    //    GameManager.Instance.EventBus.RaiseEvent("EnemyDeath");
+    //}
 }

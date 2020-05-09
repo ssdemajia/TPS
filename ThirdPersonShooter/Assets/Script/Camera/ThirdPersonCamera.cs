@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Shaoshuai.Core;
+using Shaoshuai.View;
 using UnityEngine;
 
 public class ThirdPersonCamera : MonoBehaviour
@@ -8,24 +8,28 @@ public class ThirdPersonCamera : MonoBehaviour
     [SerializeField] float damping = 1f;
 
     Transform cameraLookTarget;
-    Player localPlayer;
+    Transform localPlayer;
     void Awake()
     {
+        Debug.Log("ThirdPersonCamera Awake");
         GameManager.Instance.OnLocalPlayerJoined += HandleOnLocalPlayerJoined;
     }
 
-    void HandleOnLocalPlayerJoined (Player player)
+    void HandleOnLocalPlayerJoined (Transform player)
     {
         localPlayer = player;
-        cameraLookTarget = localPlayer.transform.Find("CameraLookTarget");
+        cameraLookTarget = localPlayer.Find("CameraLookTarget");
         if (cameraLookTarget == null)
         {
-            cameraLookTarget = localPlayer.transform;
+            cameraLookTarget = localPlayer;
         }
     }
 
     void LateUpdate()
     {
+        // 还未启动
+        if (cameraLookTarget == null)
+            return;
         Vector3 targetPosition = cameraLookTarget.position +
             localPlayer.transform.forward * cameraOffset.z +
             localPlayer.transform.up * cameraOffset.y + 

@@ -9,7 +9,7 @@ public class Connection
     public byte[] lenBytes = new byte[4];
     public int msgLen = 0; // 消息长度
     public Socket socket;
-    public int recvLen = 0;
+    public int recvLen = 0; // 已经接收的消息
     byte[] buffer; // 接收缓存
     public int BufferRemain
     {
@@ -23,8 +23,13 @@ public class Connection
         get
         {
             buffer = new byte[msgLen];
-            Array.Copy(readBuff, buffer, msgLen);
+            Array.Copy(readBuff, sizeof(Int32), buffer, 0, msgLen);
             return buffer;
         }
+    }
+
+    public void Destroy()
+    {
+        socket.Close();
     }
 }

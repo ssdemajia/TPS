@@ -1,21 +1,25 @@
-﻿using System;
+﻿using Shaoshuai.Message;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-public class Protocol
+/// <summary>
+/// 传输协议，包括类型序列化、反序列化操作
+/// </summary>
+public class Packet
 {
     List<Byte> byteList = new List<byte>();
     byte[] bytes;
     int index = 0;
     int lastOffset = 0;
-    UInt16 strLen = 0;
+    Int16 strLen = 0;
     byte[] tempBytes;
     public int Length
     {
         get { return bytes.Length - (index + lastOffset); }
     }    
     
-    public Protocol InitMsg(byte[] bytes)
+    public Packet InitMsg(byte[] bytes)
     {
         this.bytes = bytes;
         index = 0;
@@ -29,11 +33,11 @@ public class Protocol
         return byteList.ToArray();
     }
 
-    public UInt16 getUInt16()
+    public Int16 getInt16()
     {
         index += lastOffset;
         lastOffset = 2;
-        return BitConverter.ToUInt16(bytes, index);
+        return BitConverter.ToInt16(bytes, index);
     }
 
     public int getInt32()
@@ -52,7 +56,7 @@ public class Protocol
 
     public string getString()
     {
-        strLen = getUInt16();
+        strLen = getInt16();
         index += lastOffset;
         lastOffset = strLen;
         return Encoding.Unicode.GetString(bytes, index, strLen);
@@ -80,6 +84,34 @@ public class Protocol
         FixedVec1 v1 = getFixedVec1();
         FixedVec1 v2 = getFixedVec1();
         return new FixedVec2(v1, v2);
+    }
+
+    public FixedVec3 getFixedVec3()
+    {
+        FixedVec1 v1 = getFixedVec1();
+        FixedVec1 v2 = getFixedVec1();
+        FixedVec1 v3 = getFixedVec1();
+        return new FixedVec3(v1, v2, v3);
+    }
+
+    public T[] getArray<T>(T[] arr) where T: BaseFormat, new()
+    {
+        Int16 len = getInt16();
+        if (len == 0)
+            return null;
+        T[] result = new T[len];
+        for (int i = 0; i < len; i++)
+        {
+            if (getBool())
+                result[i] = null;
+            else
+            {
+                T value = new T();
+                value.Deserialize(this);
+                result[i] = value;
+            }
+        }
+        return result;
     }
     //--------------------------------------------------------------------------
     public void push(byte num)
@@ -110,8 +142,39 @@ public class Protocol
     public void push(string s)
     {
         tempBytes = Encoding.Unicode.GetBytes(s);
-        strLen = (UInt16)tempBytes.Length;
+        strLen = (Int16)tempBytes.Length;
         push(strLen);
         byteList.AddRange(tempBytes);
+    }
+
+    public void push(FixedVec1 f)
+    {
+        Int64 v = f.GetValue();
+        push(v);
+    }
+    public void push(FixedVec2 f)
+    {
+        push(f.x);
+        push(f.y);
+    }
+    public void push(FixedVec3 f)
+    {
+        push(f.x);
+        push(f.y);
+        push(f.z);
+    }
+
+    public void push<T>(T[] arr) where T: BaseFormat
+    {
+        ushort len = 0;
+        if (arr != null)
+            len = (ushort)arr.Length;
+        push(len);
+        foreach (T a in arr)
+        {
+            push(a == null);
+            if (a != null)
+                a.Deserialize(this);
+        }
     }
 }

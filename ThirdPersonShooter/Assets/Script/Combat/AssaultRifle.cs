@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class AssaultRifle : Shooter
 {
-    public override void Fire()
-    {
-        base.Fire();
-        if (canFire)
-        {
+    //public override void Fire()
+    //{
+    //    base.Fire();
+    //    if (canFire)
+    //    {
 
-        }
-    }
+    //    }
+    //}
 
-    void Update()
-    {
-        if (GameManager.Instance.InputController.Reload)
-        {
-            Reload();
-        }
-    }
+    //void Update()
+    //{
+    //    if (GameManager.Instance.InputController.Reload)
+    //    {
+    //        Reload();
+    //    }
+    //}
 }

@@ -50,9 +50,9 @@ class PlayerInfo:
 
 
 class FrameInput:
-    def __init__(self):
-        self.tick = 0
-        self.player_inputs = []
+    def __init__(self, tick=0, player_inputs=None):
+        self.tick = tick
+        self.player_inputs = player_inputs
 
     def serialize(self, p):
         p.push_int32(self.tick)
@@ -69,6 +69,7 @@ class MessageJoinRoom:
         self.opcode = conf.MSG_JOIN_ROOM
 
     def serialize(self, packet):
+        packet.push_int16(conf.MSG_JOIN_ROOM)
         packet.push_string(self.name)
 
     def deserialize(self, packet):
@@ -81,6 +82,7 @@ class MessageQuitRoom:
         self.opcode = conf.MSG_QUIT_ROOM
 
     def serialize(self, packet):
+        packet.push_int16(conf.MSG_QUIT_ROOM)
         packet.push_int32(self.value)
 
     def deserialize(self, packet):
@@ -94,6 +96,7 @@ class MessagePlayerInput:
         self.player_input = player_input
 
     def serialize(self, packet):
+        packet.push_int16(conf.MSG_PLAYER_INPUT)
         packet.push_int32(self.tick)
         packet.push_bool(self.player_input is None)
         self.player_input.serialize(packet)
@@ -113,14 +116,15 @@ class MessageStartGame:
         self.player_infos = player_infos
 
     def serialize(self, p):
+        p.push_int16(conf.MSG_START_GAME)
         p.push_int32(self.map_id)
         p.push_int32(self.local_player_id)
-        self.player_infos.serialize(p)
+        p.push_player_input_arr(self.player_infos)
 
     def deserialize(self, p):
         self.map_id = p.get_int32()
         self.local_player_id = p.get_int32()
-        self.player_infos.deserialize(p)
+        self.player_infos = p.get_player_input_arr()
 
 
 class MessageFrameInput:
@@ -129,6 +133,7 @@ class MessageFrameInput:
         self.frame_input = frame_input
 
     def serialize(self, p):
+        p.push_int16(conf.MSG_FRAME_INPUT)
         self.frame_input.serialize(p)
 
     def deserialize(self, p):

@@ -47,6 +47,10 @@ class Packet:
         length = len(arr)
         self.push_int16(length)
         for player_input in arr:
+            flag = player_input is None
+            self.push_bool(flag)
+            if flag:
+                continue
             player_input.serialize(self)
 
     def get_byte(self):
@@ -102,6 +106,9 @@ class Packet:
             return None
         res = []
         for i in range(arr_len):
+            if self.get_bool():
+                res.append(None)
+                continue
             player = PlayerInput()
             player.deserialize(self)
             res.append(player)

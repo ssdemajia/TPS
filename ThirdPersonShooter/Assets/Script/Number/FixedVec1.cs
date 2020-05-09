@@ -1,7 +1,7 @@
 ﻿using System;
 
 /// <summary>
-/// 定点数字
+/// 固定数字减少数据传输量
 /// </summary>
 [Serializable]
 public struct FixedVec1

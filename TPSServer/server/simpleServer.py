@@ -6,6 +6,7 @@ from network.simpleHost import SimpleHost
 from dispatcher import Dispatcher
 from server.common.packet import Packet
 from room import Room
+from datetime import datetime
 from server.common.message import (
     MessageJoinRoom,
     MessagePlayerInput,
@@ -18,6 +19,7 @@ class SimpleServer(object):
     def __init__(self):
         super(SimpleServer, self).__init__()
         self.id_counter = 0
+        self.last_time = datetime.now()
         self.player_count = 0  # 当前连入玩家数
         self.entities = {}
         self.host = SimpleHost()
@@ -70,17 +72,19 @@ class SimpleServer(object):
         msg.deserialize(packet)
         player_name = msg.name + str(self.id_counter)
         info = PlayerInfo(player_name, self.id_counter)
+        print '玩家：%s连入' % info.name
         self.id_counter += 1
         self.player_count += 1
         self.id2player_info[info.id] = info
         self.id2client[info.id] = client
 
         client.player_info = info
-        if self.player_count >= 2:
+        if self.player_count >= Room.max_count:
             self.room = Room()
             for info in self.id2player_info.values():
                 client = self.id2client[info.id]
                 self.room.add_player(info, client)
+            self.room.start_game()
 
     def player_quit_room(self, opcode, packet, client):
         player_info = client.player_info
@@ -94,4 +98,24 @@ class SimpleServer(object):
             self.room = None
 
     def player_input(self, opcode, packet, client):
-        pass
+        if self.room is None:
+            return
+        msg = MessagePlayerInput()
+        msg.deserialize(packet)
+        player_info = client.player_info
+        self.room.set_input(player_info, msg)
+
+    def update(self):
+        """
+        每30ms更新一次
+        """
+        now = datetime.now()
+        delta_time = (now - self.last_time).total_seconds()
+        if delta_time < 0.03:
+            return
+
+        self.last_time = now
+
+        if self.room is None:
+            return
+        self.room.update()
