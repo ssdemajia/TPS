@@ -119,7 +119,7 @@ class NetStream(object):
 
 	# append data into send_buf with a size header
 	def send(self, data):
-		print u'发送长度%d的报文到客户端' % len(data)
+		# print u'发送长度%d的报文到客户端' % len(data)
 		size = len(data) + conf.NET_HEAD_LENGTH_SIZE
 		wsize = struct.pack(conf.NET_HEAD_LENGTH_FORMAT, size)
 		self.__sendRaw(wsize + data)

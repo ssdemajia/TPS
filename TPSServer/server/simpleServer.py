@@ -21,31 +21,14 @@ class SimpleServer(object):
         self.id_counter = 0
         self.last_time = datetime.now()
         self.player_count = 0  # 当前连入玩家数
-        self.entities = {}
         self.host = SimpleHost()
         self.dispatcher = Dispatcher()
         self.room = None
         self.id2player_info = {}
         self.id2client = {}
 
-    def generate_entity_id(self):
-        raise NotImplementedError
-
-    def register_entity(self, entity):
-        eid = self.generate_entity_id
-        entity.id = eid
-        self.entities[eid] = entity
-        return
-
     def tick(self):
         self.host.process()
-
-        for eid, entity in self.entities.iteritems():
-            # Note: you can not delete entity in tick.
-            # you may cache delete items and delete in next frame
-            # or just use items.
-            entity.tick()
-
         return
 
     def dispatch(self, data, owner):
@@ -54,9 +37,16 @@ class SimpleServer(object):
         :param data: 原始数据
         :param owner: 接收的客户端
         """
+        # 当用户异常退出时发送FIN，data的长度为0
+        if len(data) == 0:
+            return
         p = Packet(data)
         opcode = p.get_int16()
 
+        def str_to_hex(s):
+            return ":".join("{:02x}".format(ord(c)) for c in s)
+        print(str_to_hex(data))
+        # print u'获得opcode:%d' % opcode
         if opcode == conf.MSG_JOIN_ROOM:
             self.player_join_room(opcode, p, owner)
         elif opcode == conf.MSG_PLAYER_INPUT:
@@ -64,15 +54,15 @@ class SimpleServer(object):
         elif opcode == conf.MSG_QUIT_ROOM:
             self.player_input(opcode, p, owner)
         else:
-            raise Exception('bad opcode %d' % opcode)
+            raise Exception(u'bad opcode %d' % opcode)
 
     def player_join_room(self, opcode, packet, client):
         # Todo 从数据库读取用户信息
         msg = MessageJoinRoom()
         msg.deserialize(packet)
         player_name = msg.name + str(self.id_counter)
-        info = PlayerInfo(player_name, self.id_counter)
-        print '玩家：%s连入' % info.name
+        info = PlayerInfo(player_name, self.id_counter, self.id_counter)
+        print u'玩家：%s连入' % info.name
         self.id_counter += 1
         self.player_count += 1
         self.id2player_info[info.id] = info

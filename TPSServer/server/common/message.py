@@ -26,10 +26,10 @@ class PlayerInput:
 
 
 class PlayerInfo:
-    def __init__(self, name='', player_id=0):
+    def __init__(self, name='', player_id=0, local_id=0):
         self.name = name
-        self.id = player_id
-        self.local_id = 0
+        self.id = player_id  # 全局玩家id
+        self.local_id = local_id  # 房间中的id
         self.init_pos = [0, 0, 0]
         self.init_deg = [0, 0, 0]
         self.prefab_id = 0
@@ -40,6 +40,7 @@ class PlayerInfo:
         p.push_int32(self.local_id)
         p.push_vec3(self.init_deg)
         p.push_vec3(self.init_deg)
+        p.push_int32(self.prefab_id)
 
     def deserialize(self, p):
         self.name = p.get_string()
@@ -47,6 +48,7 @@ class PlayerInfo:
         self.local_id = p.get_int32()
         self.init_pos = p.get_vec3()
         self.init_deg = p.get_vec3()
+        self.prefab_id = p.get_int32()
 
 
 class FrameInput:
@@ -93,7 +95,10 @@ class MessagePlayerInput:
     def __init__(self, tick=0, player_input=None):
         self.opcode = conf.MSG_PLAYER_INPUT
         self.tick = tick
-        self.player_input = player_input
+        if player_input is None:
+            self.player_input = PlayerInput()
+        else:
+            self.player_input = player_input
 
     def serialize(self, packet):
         packet.push_int16(conf.MSG_PLAYER_INPUT)

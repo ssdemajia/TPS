@@ -65,7 +65,8 @@ class Packet:
     def get_int16(self):
         self.index += self.last_length
         self.last_length = 2
-        return struct.unpack('h', self.byte_list[self.index:self.index+2])[0]
+        sub_str = self.byte_list[self.index:self.index+2]
+        return struct.unpack('<H', sub_str)[0]
 
     def get_int32(self):
         self.index += self.last_length
@@ -102,6 +103,7 @@ class Packet:
 
     def get_player_input_arr(self):
         arr_len = self.get_int16()
+        # print u'获得用户input长度：%d' % arr_len
         if arr_len == 0:
             return None
         res = []
@@ -111,5 +113,6 @@ class Packet:
                 continue
             player = PlayerInput()
             player.deserialize(self)
+            # print u"获得用户输入:%f, %f" % (player.mouse_pos[0], player.mouse_pos[1])
             res.append(player)
         return res

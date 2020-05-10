@@ -138,7 +138,6 @@ class SimpleHost(object):
 
     def handle_new_client(self, current):
         """
-
         :param current: 当前时间
         :return:
         """
@@ -187,7 +186,7 @@ class SimpleHost(object):
 
             timeout = current - client.active
             if (client.status() == conf.NET_STATE_STOP) or (timeout >= self.timeout):
-                self.queue.append((conf.NET_CONNECTION_LEAVE, client.hid, ''))
+                self.queue.append((conf.NET_CONNECTION_LEAVE, client.player_info, ''))
                 self.clients[pos] = None
                 client.close()
                 del client
