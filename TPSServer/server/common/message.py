@@ -3,6 +3,7 @@ from server.common import conf
 
 
 class PlayerInput:
+    # 包含用户输入
     def __init__(self):
         self.mouse_pos = [0, 0]
         self.hv = [0, 0]

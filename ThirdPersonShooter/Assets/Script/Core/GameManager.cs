@@ -1,19 +1,20 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using Shaoshuai.Message;
+﻿using Shaoshuai.Message;
 using Shaoshuai.Network;
-using Shaoshuai.Entity;
-using Shaoshuai.View;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using UnityEngine;
 
 namespace Shaoshuai.Core
 {
     public class GameManager: BaseManager
     {
-        [Header("ClientMode")]  
+        [Header("ClientMode")]
+        public PlayerServerInfo clientModeInfo; // 客户端模式中，玩家的信息
         public bool IsClientMode = false;
         public string serverIp = "127.0.0.1";
         public int serverPort = 9999;
-        public int maxCount = 2;
 
         [HideInInspector] public int currentMapId = 0;
         [HideInInspector] public int localPlayerId = 0;
@@ -23,19 +24,18 @@ namespace Shaoshuai.Core
         [HideInInspector] public FrameInput currentFrame;
         [HideInInspector] public List<FrameInput> frames = new List<FrameInput>();  // 累计的帧信息
         [HideInInspector] public float remainTime; // 距离下一次更新的时间累计
-        [HideInInspector] public int predictTickCount = 2;
-        [HideInInspector] public int tick = 0;
+        [HideInInspector] public int predictTickCount = 3;
+        public int tick = 0;
         [HideInInspector] public static int maxServerTick = 0;
-        
+
 
         [Header("Player")]
-        public static List<PlayerEntity> allPlayers = new List<PlayerEntity>();
-        public static PlayerEntity localPlayer;
-        public static PlayerView localPlayerView;
+        public static GameObject localPlayer;
         public static Transform localPlayerTrans;
 
+        public Transform reticle; // 准星
         public event System.Action<Transform> OnLocalPlayerJoined; 
-        public bool IsPause;
+        public bool IsPause = false;
         private List<BaseManager> managers = new List<BaseManager>();
 
         NetworkClient client;
@@ -43,11 +43,13 @@ namespace Shaoshuai.Core
 
         public static GameManager Instance { get;private set;} // 只读
         public static PlayerInput CurrentInput = new PlayerInput(); // 当前用户输入
+        public InputController inputController;
 
         private void Awake()
         {
-            Screen.SetResolution(1024, 768, false);
-            gameObject.AddComponent<InputController>();
+            Debug.Log("!!!!!!!!!!!!!!!!!!"+MainMenu.Instance.CurrentPlayer);
+            Screen.SetResolution(800, 600, false);
+            inputController = gameObject.AddComponent<InputController>();
             DoAwake();
             foreach (var manager in managers)
             {
@@ -72,11 +74,6 @@ namespace Shaoshuai.Core
             }
         }
 
-        public void RegisterManager(BaseManager mgr)
-        {
-            managers.Add(mgr);
-        }
-
         private void Start()
         {
             DoStart();
@@ -87,15 +84,23 @@ namespace Shaoshuai.Core
 
             if (IsClientMode)
             {
-                
+                clientModeInfo = new PlayerServerInfo()
+                {
+                    initPos = new FixedVec3(0, 8, 0)
+                };
+                playerCount = 1;
+                localPlayerId = 0;
+                playerInfos = new PlayerServerInfo[] { clientModeInfo };
+                frames = new List<FrameInput>();
+                StartGame(0, playerInfos, localPlayerId);
             }
             else
             {
-                client = new NetworkClient(maxCount);
+                client = new NetworkClient();
                 client.Connect(serverIp, serverPort);
                 MessageJoinRoom msg = new MessageJoinRoom { name = Application.dataPath };
                 Packet p = new Packet();
-                p.push(msg.opcode);
+                p.push((Int16)msg.opcode);
                 msg.Serialize(p);
                 client.Send(p.GetByteStream());
             }
@@ -109,115 +114,130 @@ namespace Shaoshuai.Core
             currentMapId = mapId;
             playerInfos = infos;
             this.localPlayerId = localPlayerId;
-            allPlayers.Clear();
-            
+            playerCount = infos.Length;  // 更新玩家数量
             for (int i = 0; i < playerCount; i++)
             {
-                allPlayers.Add(new PlayerEntity() { localPlayerId = i });
                 var info = playerInfos[i];
-                var instance = PlayerManager.InstantiatePlayer(allPlayers[i], info.PrefabId, info.initPos);
-                if (localPlayerId == info.id)
-                    localPlayerTrans = instance.transform;
+                var localId = info.localId;
+                if (localPlayerId == localId)
+                {
+                    localPlayer = PlayerManager.InstantiateLocalPlayer(info.PrefabId, info.initPos);
+                    localPlayerTrans = localPlayer.transform;
+                }
+                
             }
-            localPlayer = allPlayers[localPlayerId];
-            if (OnLocalPlayerJoined != null)
-                OnLocalPlayerJoined(localPlayerTrans);
+            OnLocalPlayerJoined?.Invoke(localPlayerTrans);
         }
 
         private void Update()
         {
-            client.ParseMassage(); // 解析收到的数据包
+            if (client != null)
+                client.ParseMassage(); // 解析收到的数据包
             if (!hasStart)
                 return;
-            remainTime += Time.deltaTime;
-            while (remainTime >= 0.03f)
-            {
-                remainTime -= 0.03f;
-                // 发送玩家输入
-                SendInput();
-                if (GetFrame(frameIndex) == null)  // 如果还没有接收到帧信息
-                    return;
-                Step();
-            }
+            //remainTime += Time.deltaTime;
+            //while (remainTime >= 0.017f)
+            //{
+            //    remainTime -= 0.017f;
+            //    // 发送玩家输入
+            //    SendInput();
+            //    if (GetFrame(frameIndex) == null)  // 如果还没有接收到帧信息
+            //        return;
+            //    Step();
+            //}
         }
 
-        public void SendInput()
-        {
-            if (IsClientMode)
-            {
-
-            }
-
-            if (tick > predictTickCount + maxServerTick)  // 当前客户端超过服务端的帧数了，需要等待
-            {
-                return;
-            }
-
-            MessagePlayerInput msg = new MessagePlayerInput() // 用户输入信息打包
-            {
-                input = CurrentInput,
-                tick = this.tick
-            };
-            Packet p = new Packet();
-            msg.Serialize(p);
-            client.Send(p.GetByteStream());
-            tick++;
-        }
+        //public void SendInput()
+        //{
+           
+        //    //Debug.Log("发送输入信息,id:" + localPlayerId);
+        //    MessagePlayerInput msg = new MessagePlayerInput() // 用户输入信息打包
+        //    {
+        //        input = CurrentInput,
+        //        tick = this.tick
+        //    };
+        //    Packet p = new Packet();
+        //    p.push((Int16)MessageType.PlayerInput);
+        //    msg.Serialize(p);
+        //    client.Send(p.GetByteStream());
+        //    tick++;
+        //}
 
         /// <summary>
         /// 获取tick对应的帧信息
         /// </summary>
         /// <param name="tick">第tick个帧</param>
         /// <returns>帧信息</returns>
-        public FrameInput GetFrame(int tick)
-        {
-            if (frames.Count > tick)
-            {
-                FrameInput frame = frames[tick];
-                if (frame != null && frame.tick == tick)
-                    return frame;
-            }
-            return null;
-        }
+        //public FrameInput GetFrame(int tick)
+        //{
+        //    if (frames.Count > tick)
+        //    {
+        //        FrameInput frame = frames[tick];
+        //        if (frame != null && frame.tick == tick)
+        //            return frame;
+        //    }
+        //    return null;
+        //}
 
         /// <summary>
         /// 获得输入帧
         /// </summary>
         /// <param name="input"></param>
-        public static void PushInputFrame(FrameInput input)
-        {
-            var frames = Instance.frames;
+        //public static void PushInputFrame(FrameInput input)
+        //{
+        //    var frames = Instance.frames;
 
-            // 补上本地缺少的帧信息
-            for (int i = frames.Count; i <= input.tick; i++)
-            {
-                frames.Add(new FrameInput());
-            }
-            maxServerTick = Mathf.Max(maxServerTick, input.tick);
+        //    // 补上本地缺少的帧信息
+        //    for (int i = frames.Count; i <= input.tick; i++)
+        //    {
+        //        frames.Add(new FrameInput());
+        //    }
+        //    maxServerTick = Mathf.Max(maxServerTick, input.tick);
+        //    frames[input.tick] = input;
+        //}
 
-            frames[input.tick] = input;
-            
-        }
-        void Step()
+        // 更新各个玩家信息
+        //void Step()
+        //{
+        //    frameIndex++;
+        //    //Debug.Log("frame index:" + frameIndex);
+        //    UpdateManagers();
+        //}
+
+        private void UpdateManagers()  // 更新每一个管理器
         {
-            currentFrame = GetFrame(frameIndex); // 当前帧对应信息
-            for (var i = 0; i < playerCount; i++)
+            var deltaTime = new FixedVec1(0.3f);
+            foreach(var manager in managers)
             {
-                allPlayers[i].input = currentFrame.inputs[i];
+                manager.DoUpdate(deltaTime);
             }
-            frameIndex++;
         }
 
         private void OnDestroy()
         {
-            MessageQuitRoom msg = new MessageQuitRoom();
-            Packet p = new Packet();
-            msg.Serialize(p);
-            client.Send(p.GetByteStream());
+            if (client != null)
+            {
+                MessageQuitRoom msg = new MessageQuitRoom();
+                Packet p = new Packet();
+                msg.Serialize(p);
+                client.Send(p.GetByteStream());
+            }
+           
             foreach (var manager in managers)
             {
                 manager.DoDestroy();
             }
+        }
+
+        public void RegisterManager(BaseManager mgr)
+        {
+            managers.Add(mgr);
+        }
+        public static HttpContent ObjToHttpContent<T>(T obj)
+        {
+            var value = JsonUtility.ToJson(obj);
+            HttpContent content = new StringContent(value, Encoding.UTF8, "application/json");
+            return content;
         }
     }
 

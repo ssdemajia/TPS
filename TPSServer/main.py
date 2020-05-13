@@ -9,7 +9,7 @@ server.host.startup(9999)
 
 while True:
     server.tick()
-    server.update()
+    # server.update()
     event, wparam, data = server.host.read()
 
     if event < 0:

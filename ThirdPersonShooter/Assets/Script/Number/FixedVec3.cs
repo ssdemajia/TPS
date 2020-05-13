@@ -50,7 +50,8 @@ public struct FixedVec3
     }
     public Vector3 ToVector3()
     {
-        return new Vector3(x.ToFloat(), 0, y.ToFloat());
+        Vector3 v = new Vector3(x.ToFloat(), y.ToFloat(), z.ToFloat());
+        return v;
     }
 
     public static FixedVec3 operator +(FixedVec3 a, FixedVec3 b)
@@ -97,4 +98,5 @@ public struct FixedVec3
     {
         return this.x == f.x && this.y == f.y && this.z == f.z;
     }
+
 }

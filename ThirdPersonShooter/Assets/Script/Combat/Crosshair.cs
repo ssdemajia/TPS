@@ -1,23 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Shaoshuai.Core;
 
 public class Crosshair : MonoBehaviour
 {
-    //[SerializeField] Texture2D image;
-    //[SerializeField] int size;
-    //[SerializeField] float maxAngle;
-    //[SerializeField] float minAngle;
     public float RotationX;
-    //private void OnGUI()
-    //{
-    //    // 得到准星在屏幕空间的坐标
-    //    Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-    //    screenPos.y = Screen.height - screenPos.y;
-    //    // 校正准星位置
-    //    GUI.DrawTexture(new Rect(screenPos.x - size/2, screenPos.y - size/2, size, size), image);
-    //}
 
     internal void SetRotation(float v)
     {
@@ -35,6 +21,7 @@ public class Crosshair : MonoBehaviour
 
     private void Start()
     {
+        Reticle = GameManager.Instance.reticle;
         crossTop = Reticle.Find("top").transform;
         crossBottom = Reticle.Find("bottom").transform;
         crossLeft = Reticle.Find("left").transform;
@@ -45,7 +32,7 @@ public class Crosshair : MonoBehaviour
     private void Update()
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-        Reticle.transform.position = Vector3.Lerp(Reticle.transform.position, screenPos, speed * Time.deltaTime);
+        //Reticle.transform.position = Vector3.Lerp(Reticle.transform.position, screenPos, speed * Time.deltaTime);
     }
 
     public void ApplyScale(float scale)

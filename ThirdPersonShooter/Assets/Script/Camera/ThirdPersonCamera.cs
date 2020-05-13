@@ -1,5 +1,4 @@
 ﻿using Shaoshuai.Core;
-using Shaoshuai.View;
 using UnityEngine;
 
 public class ThirdPersonCamera : MonoBehaviour
@@ -11,7 +10,6 @@ public class ThirdPersonCamera : MonoBehaviour
     Transform localPlayer;
     void Awake()
     {
-        Debug.Log("ThirdPersonCamera Awake");
         GameManager.Instance.OnLocalPlayerJoined += HandleOnLocalPlayerJoined;
     }
 

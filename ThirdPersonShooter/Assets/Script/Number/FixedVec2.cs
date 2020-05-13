@@ -11,30 +11,40 @@ public struct FixedVec2
 
         this.x = new FixedVec1(x);
         this.y = new FixedVec1(y);
-
     }
+
     public FixedVec2(FixedVec1 x, FixedVec1 y)
     {
         this.x = x;
         this.y = y;
-
     }
+
+    public FixedVec2(FixedVec2 a)
+    {
+        this.x = a.x;
+        this.y = a.y;
+    }
+
     public Vector3 ToVector3()
     {
         return new Vector3(x.ToFloat(), 0, y.ToFloat());
     }
+
     public static FixedVec2 GetV2(FixedVec1 x, FixedVec1 y)
     {
         return new FixedVec2(x, y);
     }
+
     public static FixedVec2 operator +(FixedVec2 a, FixedVec2 b)
     {
         return new FixedVec2(a.x + b.x, a.y + b.y);
     }
+
     public static FixedVec2 operator -(FixedVec2 a, FixedVec2 b)
     {
         return new FixedVec2(a.x - b.x, a.y - b.y);
     }
+
     public static FixedVec2 operator *(FixedVec2 a, FixedVec1 b)
     {
         return new FixedVec2(a.x * b, a.y * b);
@@ -77,9 +87,11 @@ public struct FixedVec2
             {
                 return new FixedVec2();
             }
-            FixedVec1 n = ((x * x) + (y * y)).Sqrt();
-            return new FixedVec2(x / n, y / n);
-
+            float fx = x.ToFloat();
+            float fy = y.ToFloat();
+            float fn = Mathf.Sqrt(fx * fx + fy * fy);
+            var value = new FixedVec2(fx / fn, fy / fn);
+            return value;
         }
     }
 
@@ -88,10 +100,7 @@ public struct FixedVec2
     public static FixedVec2 up = new FixedVec2(0, 1);
     public static FixedVec2 down = new FixedVec2(0, -1);
     public static FixedVec2 zero = new FixedVec2(0, 0);
-    //public static V3 operator +(V3 v3,Ratio ratio)
-    //{
 
-    //}
     public FixedVec1 Dot(FixedVec2 b)
     {
         return Dot(this, b);
@@ -135,4 +144,15 @@ public struct FixedVec2
         hashCode = hashCode * -1521134295 + y.GetHashCode();
         return hashCode;
     }
+
+    public void Normalize()
+    {
+        var a = x * x + y * y;
+        if (a.m_num == 0)
+            return;
+        var b = FixedVec1.Sqrt(a);
+        x /= b;
+        y /= b;
+    }
+
 }

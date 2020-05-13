@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 /// <summary>
 /// 传输协议，包括类型序列化、反序列化操作
@@ -129,7 +130,7 @@ public class Packet
         byteList.AddRange(BitConverter.GetBytes(num));
     }
 
-    public void push(UInt16 num)
+    public void push(Int16 num)
     {
         byteList.AddRange(BitConverter.GetBytes(num));
     }

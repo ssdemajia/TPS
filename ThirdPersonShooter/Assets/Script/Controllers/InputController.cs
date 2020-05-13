@@ -7,8 +7,11 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
-    public float Vertical;
     public float Horizontal;
+    public float Vertical;
+    public float MouseInputX;
+    public float MouseInputY;
+    public FixedVec2 inputHV;
     public FixedVec2 MouseInput;
     public bool Fire1;
     public bool Reload;
@@ -18,12 +21,16 @@ public class InputController : MonoBehaviour
     public bool IsJump;
     public bool Escape;
 
+    // 更新当前玩家输入
     private void Update()
     {
-        Vertical = Input.GetAxis("Vertical");
         Horizontal = Input.GetAxis("Horizontal");
-        FixedVec2 inputHV = new FixedVec2(Vertical, Horizontal);
-        MouseInput = new FixedVec2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+        Vertical = Input.GetAxis("Vertical");
+        MouseInputX = Input.GetAxisRaw("Mouse X");
+        MouseInputY = Input.GetAxisRaw("Mouse Y");
+
+        inputHV = new FixedVec2(Horizontal, Vertical);
+        MouseInput = new FixedVec2(MouseInputX, MouseInputY);
         Fire1 = Input.GetButton("Fire1");
         Reload = Input.GetKey(KeyCode.R);
         Escape = Input.GetKey(KeyCode.Escape);

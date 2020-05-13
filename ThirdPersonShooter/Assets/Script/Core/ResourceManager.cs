@@ -17,14 +17,13 @@ namespace Shaoshuai.Core
         public override void DoAwake()
         {
             Instance = this;
-
         }
 
         public GameObject LoadPrefab(int id)
         {
             if (id_prefab.TryGetValue(id, out var value))
                 return value;
-            var prefab = (GameObject)Resources.Load(prefabsDir + "Player");
+            var prefab = (GameObject)Resources.Load(prefabsDir + "Player"); // 需要将资源放在Resources目录下
             id_prefab[id] = prefab;
             return prefab;
         }

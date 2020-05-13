@@ -297,9 +297,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d5dc2685ec863747b717a88e6a68179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 8d8b94bb91b15454d89a4592632b6fbe, type: 3}
-  delayBetweenClips: 1
-  speed: 0.3
 --- !u!1 &895147438811354734
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,9 +795,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d5dc2685ec863747b717a88e6a68179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 29d5d9010ff41d44680f655875408d1b, type: 3}
-  delayBetweenClips: 2
-  speed: 1
 --- !u!1 &4087990217351452425
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,11 +946,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 608752990583120308}
-  - component: {fileID: 8418338401888064816}
   - component: {fileID: 446614568018789542}
-  - component: {fileID: 4426931575661687960}
   - component: {fileID: 4606011010961950387}
-  - component: {fileID: 1888215507732602730}
+  - component: {fileID: -7768257605993913236}
+  - component: {fileID: -8047677609420064456}
+  - component: {fileID: 1449420184715897552}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -972,7 +966,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4367068303685649426}
   m_LocalRotation: {x: -0, y: 0.9910437, z: -0, w: -0.13353807}
-  m_LocalPosition: {x: -2.21, y: 1, z: -17.76}
+  m_LocalPosition: {x: -2.21, y: 0, z: -17.76}
   m_LocalScale: {x: 1, y: 1, z: 1.0014}
   m_Children:
   - {fileID: 7048089860173773182}
@@ -982,25 +976,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 195.34799, z: 0}
---- !u!114 &8418338401888064816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4367068303685649426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61bcd1b78ff9dc247ac012eb0c4c0d4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gravity: 30
-  soldier: {fileID: 11400000, guid: 67a28c964dc0a56419ace5619cf3ca8c, type: 2}
-  MouseControl:
-    Damping: {x: 3.27, y: 3.27}
-    Sensitivity: {x: 5, y: 4}
-    LockMouse: 1
-  crosshair: {fileID: 3333837971474184496}
 --- !u!114 &446614568018789542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1018,20 +993,6 @@ MonoBehaviour:
   spawnPoints:
   - {fileID: 0}
   - {fileID: 0}
---- !u!114 &4426931575661687960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4367068303685649426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d2c1689cfb57d04795453026ad85131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  crosshair: {fileID: 3333837971474184496}
-  sensitive: 1
 --- !u!114 &4606011010961950387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1044,8 +1005,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fcbed60613a4784198e43a575d48da9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gun: {fileID: 4339103929774982221}
---- !u!143 &1888215507732602730
+--- !u!114 &-7768257605993913236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4367068303685649426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61bcd1b78ff9dc247ac012eb0c4c0d4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravity: 30
+  soldier: {fileID: 11400000, guid: 67a28c964dc0a56419ace5619cf3ca8c, type: 2}
+  MouseControl:
+    Damping: {x: 4, y: 0}
+    Sensitivity: {x: 4, y: 1}
+    LockMouse: 0
+  crosshair: {fileID: 0}
+  floatBar: {fileID: 0}
+--- !u!143 &-8047677609420064456
 CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1056,13 +1036,27 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2.7
+  m_Height: 3.17
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.58, z: 0}
+  m_Center: {x: 0, y: 0.76, z: 0}
+--- !u!114 &1449420184715897552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4367068303685649426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d2c1689cfb57d04795453026ad85131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshair: {fileID: 0}
+  sensitive: 1
 --- !u!1 &4505855096172242593
 GameObject:
   m_ObjectHideFlags: 0
@@ -1377,9 +1371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d5dc2685ec863747b717a88e6a68179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: f6cb1f581b7444b23a05b613a16420d5, type: 3}
-  delayBetweenClips: 0
-  speed: 1
 --- !u!1 &5692827036247433960
 GameObject:
   m_ObjectHideFlags: 0
@@ -1489,15 +1480,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f409c0d1aa0ed9f4ea9d897d80459308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunForce: 0.5
-  rateOfFire: 0.1
-  projectile: {fileID: 4962406675930894917, guid: 84f201a512b65894881ac228dae9b650,
-    type: 3}
-  muzzle: {fileID: 8558958291114370607}
-  audio: {fileID: 6524887763083564584}
-  ammoCounter: {fileID: 0}
-  AimTarget: {fileID: 0}
-  AimTargetOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &1934486329922875227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1510,12 +1492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0450ed5a8f053284491e8d0ec84a7c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAmmo: 40
-  reloadTime: 4
-  clipSize: 30
-  ammo: 0
-  reloadAudio: {fileID: 4753348097489738762}
-  Remain: 0
 --- !u!114 &6165931706281714660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1528,105 +1504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c67cf3452f9e0948844e2ff6ff721f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layers:
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 0.20668975
-        value: 0.7630311
-        inSlope: -2.8561022
-        outSlope: -2.8561022
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.048068967
-      - serializedVersion: 3
-        time: 1
-        value: 0.23529434
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 0
-    direction: {x: 0, y: 1, z: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: -0.005118737
-        value: 0.0045933574
-        inSlope: 1.445002
-        outSlope: 1.445002
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.1830438
-        value: 0.27648857
-        inSlope: -0.47693318
-        outSlope: -0.47693318
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.40403774
-        value: -0.25364682
-        inSlope: 0.38788807
-        outSlope: 0.38788807
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.56461644
-        value: 0.25613344
-        inSlope: 0.4410392
-        outSlope: 0.4410392
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.78104234
-        value: -0.24003722
-        inSlope: -0.56336343
-        outSlope: -0.56336343
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.9909363
-        value: 0.0046653748
-        inSlope: 1.1658392
-        outSlope: 1.1658392
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 0
-    direction: {x: 1, y: 0, z: 0}
-  speed: 0.5
-  cooldown: 0.2
-  strength: 1
 --- !u!1 &5925230345230123742
 GameObject:
   m_ObjectHideFlags: 0

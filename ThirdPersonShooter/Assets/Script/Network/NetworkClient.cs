@@ -17,7 +17,7 @@ namespace Shaoshuai.Network
         public Connection conn;
         public Queue<Packet> MessageQ;
 
-        public NetworkClient(int maxClient)
+        public NetworkClient()
         {
             conn = new Connection();
             conn.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -74,7 +74,7 @@ namespace Shaoshuai.Network
 
         public void Send(byte[] bytes)
         {
-            byte[] length = BitConverter.GetBytes(bytes.Length);
+            byte[] length = BitConverter.GetBytes(bytes.Length + sizeof(Int32));
             byte[] buffer = length.Concat(bytes).ToArray();
             conn.socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null);
         }
@@ -94,7 +94,7 @@ namespace Shaoshuai.Network
                 case MessageType.FrameInput:
                     var inputMsg = new MessageFrameInput();
                     inputMsg.Deserialize(packet);
-                    GameManager.PushInputFrame(inputMsg.input);
+                    //GameManager.PushInputFrame(inputMsg.input);
                     break;
                 case MessageType.StartGame:
                     var startMsg = new MessageStartGame();

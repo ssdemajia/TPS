@@ -23,7 +23,7 @@ public struct FixedVec1
 
     public FixedVec1(Int64 x)
     {
-        m_num = x << frac_bits;
+        m_num = x;
     }
 
     public Int64 GetValue()
@@ -148,7 +148,10 @@ public struct FixedVec1
     //*********************************************************************
     public static FixedVec1 operator *(FixedVec1 f1, FixedVec1 f2)
     {
-        return new FixedVec1(f1.GetValue() * f2.GetValue());
+        Int64 prev_v = f1.GetValue() * f2.GetValue();
+        prev_v /= 1 << frac_bits;
+        FixedVec1 value = new FixedVec1(prev_v);
+        return value;
     }
 
     public static FixedVec1 operator *(FixedVec1 f1, int f2)
@@ -191,7 +194,8 @@ public struct FixedVec1
             UnityEngine.Debug.LogError("div zero");
             return FixedVec1.Zero;
         }
-        return new FixedVec1(f1.GetValue() / f2.GetValue());
+        Int64 prev_v = f1.GetValue() / f2.GetValue();
+        return new FixedVec1(prev_v);
     }
 
     public static FixedVec1 operator /(FixedVec1 f1, int f2)
@@ -347,7 +351,7 @@ public struct FixedVec1
 
     public float ToFloat()
     {
-        return m_num / (float)(1 << frac_bits);
+        return (float)(m_num / (1 << frac_bits));
     }
 
     public int ToInt()

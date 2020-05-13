@@ -97,7 +97,7 @@ class SimpleServer(object):
 
     def update(self):
         """
-        每30ms更新一次
+        每30ms更新一次，主要用于帧同步
         """
         now = datetime.now()
         delta_time = (now - self.last_time).total_seconds()
