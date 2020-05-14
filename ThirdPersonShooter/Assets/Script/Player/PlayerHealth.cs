@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using Shaoshuai.Core;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : Destructable
 {
+    [SerializeField] HPCounter hp;
     [SerializeField] SpawnPoint[] spawnPoints;
+
     //[SerializeField] Ragdoll ragdoll;
     void SpawnAtNewPoint()
     {
@@ -12,6 +15,7 @@ public class PlayerHealth : Destructable
         transform.position = spawnPoints[index].transform.position;
         transform.rotation = spawnPoints[index].transform.rotation;
     }
+
     public override void Die()
     {
         base.Die();
@@ -19,4 +23,12 @@ public class PlayerHealth : Destructable
         //ragdoll.EnableRagdoll(false);
     }
 
+    private void LateUpdate()
+    {
+        if (hp == null)
+            return;
+        GameManager.Instance.CurrentPlayer.hp = HitPointsRemain;
+        hitPoints = GameManager.Instance.CurrentPlayer.level * 100;
+        hp.Display(HitPointsRemain, hitPoints);
+    }
 }

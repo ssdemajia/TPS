@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Shaoshuai.Core;
 using UnityEngine;
-using Shaoshuai.Core;
-using Shaoshuai.Message;
 
 public class PlayerAnimation : MonoBehaviour
 {

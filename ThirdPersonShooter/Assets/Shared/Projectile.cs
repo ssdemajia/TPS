@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
 {
     [SerializeField] float speed = 100;
     [SerializeField] float timeToLive = 3;
-    [SerializeField] float damage = 1;
+    [SerializeField] int damage = 1;
     [SerializeField] Transform bullethole;
     Vector3 destination;
 
@@ -34,13 +32,23 @@ public class Projectile : MonoBehaviour
     private void Check(RaycastHit hitinfo)
     {
         var destructable = hitinfo.transform.GetComponent<Destructable>();
+        // 设置弹痕
         destination = hitinfo.point + hitinfo.normal * 0.002f;
         Transform hole = Instantiate(bullethole, destination, Quaternion.LookRotation(hitinfo.normal) * Quaternion.Euler(0, 180, 0));
         hole.SetParent(hitinfo.transform);
 
         if (destructable == null)
             return;
-        destructable.TakeDamage(damage);
+        // 对角色进行扣血
+        if (destructable.parent != null)
+        {
+            var rootDestructable = destructable.parent;
+            rootDestructable.TakeDamage(damage, destructable.name);
+        } else
+        {
+            destructable.TakeDamage(damage, "");
+        }
+        
     }
 
     bool isDestinationReached()

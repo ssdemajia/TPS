@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     {
         public Vector2 Damping = new Vector2(4.0f, 1f);     // 阻尼
         public Vector2 Sensitivity = new Vector2(4.0f, 2f); // 灵敏度
-        public bool LockMouse = true;
+        public bool LockMouse = false;
     }
     [SerializeField] float gravity = 30f;
     [SerializeField] Soldier soldier;
@@ -37,9 +37,11 @@ public class Player : MonoBehaviour
     Vector2 mouseInput;
     public Crosshair crosshair;
     Transform lookAtTarget;
-    public FloatBar floatBar;
+
+
     private void Awake()
     {
+        GameManager.Instance.LocalPlayer = this;
         MouseControl = new MouseInput();
         inputController = GameManager.Instance.inputController;
         moveController = GetComponent<CharacterController>();
@@ -70,7 +72,7 @@ public class Player : MonoBehaviour
         // 更新玩家角度
         transform.Rotate(Vector3.up * mouseInput.x * MouseControl.Sensitivity.x);
         float currentAngle = lookAtTarget.transform.eulerAngles.x - mouseInput.y * MouseControl.Sensitivity.y;
-        if (currentAngle > 40 && currentAngle < 300)
+        if (currentAngle > 20 && currentAngle < 330)
             return;
         lookAtTarget.transform.RotateAround(transform.position, transform.right, -mouseInput.y * MouseControl.Sensitivity.y);
         crosshair.SetRotation(-mouseInput.y * MouseControl.Sensitivity.y);

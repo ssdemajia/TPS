@@ -125,6 +125,19 @@ class Player:
         res['player']['hp'] = Player.get_hp(player.level)
         res['player']['damage'] = Player.get_damage(player.level),
         return res
+    @staticmethod
+    def save_player(player):
+
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO player VALUES(?, ?, ?, ?, ?)',
+                       (player.username, player.player_name, player.exp,
+                        player.level, player.ammo))
+        conn.commit()
+        res = {
+            'code': 105,
+            'player': player.__dict__
+        }
+        return res
 
     @staticmethod
     def create_table():

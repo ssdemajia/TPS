@@ -11,6 +11,6 @@ public class AmmoCounter : MonoBehaviour
     // 显示子弹数
     public void Display(int ammo, int maxAmmo)
     {
-        text.text = string.Format("{0}/{1}", ammo, maxAmmo);
+        text.text = $"子弹数:{ammo}/{maxAmmo}";
     }
 }

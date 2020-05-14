@@ -6,7 +6,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class PathFinder : MonoBehaviour
 {
-    public NavMeshAgent agent;
+    [HideInInspector] public NavMeshAgent agent;
     [SerializeField] float distThreshold; 
     public event System.Action OnDestinationReach;
     bool reached;

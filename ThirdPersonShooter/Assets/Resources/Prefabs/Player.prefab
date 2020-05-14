@@ -297,6 +297,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d5dc2685ec863747b717a88e6a68179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clip: {fileID: 0}
+  delayBetweenClips: 0
+  speed: 1
 --- !u!1 &895147438811354734
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,6 +798,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d5dc2685ec863747b717a88e6a68179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clip: {fileID: 0}
+  delayBetweenClips: 0
+  speed: 1
 --- !u!1 &4087990217351452425
 GameObject:
   m_ObjectHideFlags: 0
@@ -1005,6 +1011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fcbed60613a4784198e43a575d48da9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gun: {fileID: 0}
 --- !u!114 &-7768257605993913236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1023,7 +1030,7 @@ MonoBehaviour:
     Damping: {x: 4, y: 0}
     Sensitivity: {x: 4, y: 1}
     LockMouse: 0
-  crosshair: {fileID: 0}
+  crosshair: {fileID: 3333837971474184496}
   floatBar: {fileID: 0}
 --- !u!143 &-8047677609420064456
 CharacterController:
@@ -1055,7 +1062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d2c1689cfb57d04795453026ad85131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crosshair: {fileID: 0}
+  crosshair: {fileID: 3333837971474184496}
   sensitive: 1
 --- !u!1 &4505855096172242593
 GameObject:
@@ -1371,6 +1378,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d5dc2685ec863747b717a88e6a68179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clip: {fileID: 0}
+  delayBetweenClips: 0
+  speed: 1
 --- !u!1 &5692827036247433960
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,7 +1456,6 @@ GameObject:
   - component: {fileID: 9135459759194912801}
   - component: {fileID: 4339103929774982221}
   - component: {fileID: 1934486329922875227}
-  - component: {fileID: 6165931706281714660}
   m_Layer: 8
   m_Name: Weapon
   m_TagString: Untagged
@@ -1480,6 +1489,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f409c0d1aa0ed9f4ea9d897d80459308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gunForce: 0.5
+  rateOfFire: 0
+  projectile: {fileID: 0}
+  muzzle: {fileID: 0}
+  audio: {fileID: 0}
+  ammoCounter: {fileID: 0}
+  AimTarget: {fileID: 0}
+  AimTargetOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &1934486329922875227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1492,18 +1509,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0450ed5a8f053284491e8d0ec84a7c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6165931706281714660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5824372798349118583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c67cf3452f9e0948844e2ff6ff721f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  maxAmmo: 400
+  reloadTime: 3
+  clipSize: 40
+  ammo: 0
+  reloadAudio: {fileID: 0}
+  Remain: 0
 --- !u!1 &5925230345230123742
 GameObject:
   m_ObjectHideFlags: 0

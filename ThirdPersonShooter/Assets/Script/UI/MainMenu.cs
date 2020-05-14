@@ -40,7 +40,7 @@ public class MainMenu : MonoBehaviour
         {
             if (_currentPlayer == null)
             {
-                _currentPlayer = new Shaoshuai.Message.Player()
+                _currentPlayer = new Shaoshuai.Message.Player() // 初始角色信息
                 {
                     player_name = "ssss",
                     exp = 0,
@@ -98,7 +98,7 @@ public class MainMenu : MonoBehaviour
         {
             resp = await client.PostAsync("http://127.0.0.1:9000/login", content);
         }
-        catch (WebException)
+        catch (Exception)
         {
             LoadingPanel.SetActive(false);
             infoLabel.text = "连接服务器错误";

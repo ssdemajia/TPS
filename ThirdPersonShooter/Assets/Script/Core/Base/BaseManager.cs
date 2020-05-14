@@ -8,7 +8,7 @@ namespace Shaoshuai.Core
     {
         public virtual void DoAwake() { }
         public virtual void DoStart() { }
-        public virtual void DoUpdate(FixedVec1 deltaTime) { }
+        public virtual void DoUpdate(float deltaTime) { }
         public virtual void DoDestroy() { }
     }
 }
