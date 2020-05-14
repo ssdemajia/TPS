@@ -8,6 +8,11 @@ public class PlayerHealth : Destructable
     [SerializeField] HPCounter hp;
     [SerializeField] SpawnPoint[] spawnPoints;
 
+    private void Start()
+    {
+        hitPoints = GameManager.Instance.CurrentPlayer.level * 100;
+        damageTaken = hitPoints - GameManager.Instance.CurrentPlayer.hp;
+    }
     //[SerializeField] Ragdoll ragdoll;
     void SpawnAtNewPoint()
     {

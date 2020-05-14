@@ -29,7 +29,6 @@ namespace Shaoshuai.Core
                         exp = 0,
                         level = 1,
                         ammo = 200,
-                        damage = 10,
                         hp = 100
                     };
                 }
@@ -59,9 +58,9 @@ namespace Shaoshuai.Core
         }
         private void Awake()
         {
-            if (MainMenu.Instance != null)
+            if (Usersession.Instance != null)
             {
-                CurrentPlayer = MainMenu.Instance.CurrentPlayer;
+                CurrentPlayer = Usersession.Instance.player;
             }
             Timer = gameObject.AddComponent<MonoTimer>();
             Screen.SetResolution(800, 600, false);

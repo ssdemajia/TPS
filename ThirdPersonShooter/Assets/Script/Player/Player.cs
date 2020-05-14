@@ -16,7 +16,8 @@ public class Player : MonoBehaviour
         public bool LockMouse = false;
     }
     [SerializeField] float gravity = 30f;
-    [SerializeField] Soldier soldier;
+    [SerializeField] float jumpSpeed = 10f;
+    [SerializeField] float runSpeed = 10f;
     [SerializeField] MouseInput MouseControl;
 
     PlayerHealth health;
@@ -80,15 +81,14 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        float speed = soldier.runSpeed;
 
         if (moveController.isGrounded)
         {
-            moveDirection = inputController.Horizontal * transform.right * speed +
-                        inputController.Vertical * transform.forward * speed;
+            moveDirection = inputController.Horizontal * transform.right * runSpeed +
+                        inputController.Vertical * transform.forward * runSpeed;
             if (inputController.IsJump)
             {
-                moveDirection.y = soldier.jumpSpeed;
+                moveDirection.y = jumpSpeed;
                 animator.SetBool("IsJump", true);
             }
             else

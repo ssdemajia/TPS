@@ -81,8 +81,6 @@ class User:
 
 
 class Player:
-    basic_damage = 10
-    basic_hp = 100
 
     def __init__(self, player_name='', username=''):
         self.player_name = player_name
@@ -90,16 +88,12 @@ class Player:
         self.exp = 0
         self.level = 1
         self.ammo = 200
-
-    @staticmethod
-    def get_damage(level):
-        # 每一枪的伤害随着等级提高而增加
-        return Player.basic_damage + level
+        self.hp = Player.get_hp(1)
 
     @staticmethod
     def get_hp(level):
         # 血量随着等级提高增加
-        return Player.basic_hp + level*10
+        return level*100
 
     @staticmethod
     def create_player(username, player_name):
@@ -114,28 +108,25 @@ class Player:
             }
         player = Player(player_name, username)
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO player VALUES(?, ?, ?, ?, ?)',
+        cursor.execute('INSERT INTO player VALUES(?, ?, ?, ?, ?, ?)',
                        (player.username, player.player_name, player.exp,
-                        player.level, player.ammo))
+                        player.level, player.ammo, player.hp))
         conn.commit()
         res = {
             'code': 105,
             'player': player.__dict__
         }
-        res['player']['hp'] = Player.get_hp(player.level)
-        res['player']['damage'] = Player.get_damage(player.level),
         return res
-    @staticmethod
-    def save_player(player):
 
+    @staticmethod
+    def save(player):
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO player VALUES(?, ?, ?, ?, ?)',
-                       (player.username, player.player_name, player.exp,
-                        player.level, player.ammo))
+        cursor.execute('UPDATE player SET exp = ?, hp=?, level=?, ammo=? WHERE player_name = ?',
+                       (player.exp, player.hp,
+                        player.level, player.ammo, player.player_name))
         conn.commit()
         res = {
-            'code': 105,
-            'player': player.__dict__
+            'code': 107,
         }
         return res
 
@@ -144,7 +135,7 @@ class Player:
         cursor = conn.cursor()
         try:
             cursor.execute('''CREATE TABLE player
-             (username text, player_name text, exp int, level int, ammo int)
+             (username text, player_name text, exp int, level int, ammo int, hp int)
              ''')
         except sqlite3.OperationalError as e:
             print(e)
@@ -161,8 +152,7 @@ class Player:
                 'exp': item[2],
                 'level': item[3],
                 'ammo': item[4],
-                'damage': Player.get_damage(item[3]),
-                'hp': Player.get_hp(item[3])
+                'hp': item[5]
             })
         return players
 
@@ -190,6 +180,8 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             res = self.register(data)
         elif path == '/create':
             res = self.create(data)
+        elif path == '/save':
+            res = self.save(data)
         res = json.dumps(res)
         self.send_response(200)
         self.send_header('Content-Type', 'application/json')
@@ -206,6 +198,15 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
     def create(self, data):
         res = Player.create_player(data['username'], data['player_name'])
+        return res
+
+    def save(self, data):
+        player = Player(player_name=data[u'player_name'])
+        player.level = data[u'level']
+        player.hp = data[u'hp']
+        player.ammo = data[u'ammo']
+        player.exp = data[u'exp']
+        res = Player.save(player)
         return res
 
 

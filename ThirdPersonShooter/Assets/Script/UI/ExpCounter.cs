@@ -25,17 +25,15 @@ public class ExpCounter : MonoBehaviour
         {
             level += 1;
             maxExp = GameManager.Instance.CurrentPlayer.level * 100;
+            GameManager.Instance.CurrentPlayer.level = level;
             exp = 0;
         }
+        GameManager.Instance.CurrentPlayer.exp = exp;
     }
 
     // 显示经验数
     private void LateUpdate()
     {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.CurrentPlayer.level = level;
-        }
         text.text = $"经验:{exp}/{maxExp} 等级:{level}";
     }
 }

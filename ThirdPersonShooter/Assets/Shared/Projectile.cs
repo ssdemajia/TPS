@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Shaoshuai.Core;
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
@@ -39,12 +40,15 @@ public class Projectile : MonoBehaviour
 
         if (destructable == null)
             return;
-        // 对角色进行扣血
+
+        // 对Enemy角色进行扣血
         if (destructable.parent != null)
         {
+            var nextDamage = damage + GameManager.Instance.CurrentPlayer.level;
             var rootDestructable = destructable.parent;
-            rootDestructable.TakeDamage(damage, destructable.name);
-        } else
+            rootDestructable.TakeDamage(nextDamage, destructable.name);
+        } 
+        else // 对Player进行扣血
         {
             destructable.TakeDamage(damage, "");
         }

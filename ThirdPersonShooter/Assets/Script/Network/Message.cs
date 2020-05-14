@@ -8,7 +8,6 @@ namespace Shaoshuai.Message {
         public int exp;
         public int level;
         public int ammo;
-        public int damage;
         public int hp;
     }
     [Serializable]
@@ -54,6 +53,23 @@ namespace Shaoshuai.Message {
         public string password;
     }
 
+    [Serializable]
+    public class SaveRequest
+    {
+        public SaveRequest(Player player)
+        {
+            this.player_name = player.player_name;
+            this.level = player.level;
+            this.ammo = player.ammo;
+            this.hp = player.hp;
+            this.exp = player.exp;
+        }
+        public string player_name;
+        public int exp;
+        public int level;
+        public int ammo;
+        public int hp;
+    }
     [Serializable]
     public class CreateResponse
     {

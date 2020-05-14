@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Shooter : MonoBehaviour
 {
-    [SerializeField] float gunForce = 0.5f;  // 后坐力
     [SerializeField] float rateOfFire;
     [SerializeField] Projectile projectile; // 子弹
     [SerializeField] Transform muzzle; // 子弹出发的地址

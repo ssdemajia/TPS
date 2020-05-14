@@ -56,7 +56,11 @@ public class WeaponReload : MonoBehaviour
     public void TakeFromClip(int amount)
     {
         if (Remain >= amount)
+        {
             Remain -= amount;
+            GameManager.Instance.CurrentPlayer.ammo -= amount;
+        }
+            
     }
 
     private void LateUpdate()

@@ -1,14 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+﻿using Shaoshuai.Core;
+using Shaoshuai.Message;
 using System;
 using System.Net.Http;
-using System.Threading.Tasks;
-using Shaoshuai.Message;
-using Shaoshuai.Core;
-using System.Net;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -32,7 +27,6 @@ public class MainMenu : MonoBehaviour
     GameObject LoadingPanel;// 等待画面
 
     MonoTimer timer;
-    string username;
     Shaoshuai.Message.Player _currentPlayer;
     public Shaoshuai.Message.Player CurrentPlayer
     {
@@ -46,7 +40,6 @@ public class MainMenu : MonoBehaviour
                     exp = 0,
                     level = 1,
                     ammo = 200,
-                    damage = 10,
                     hp = 100
                 };
             }
@@ -91,9 +84,12 @@ public class MainMenu : MonoBehaviour
     {
         LoadingPanel.SetActive(true);
         var info = new LoginRequest(usernameInput.text, passwordInput.text);
-        username = info.username;
+        
+        Usersession.SetUser(info.username, info.password);
+
         var content = GameManager.ObjToHttpContent(info);
         HttpResponseMessage resp;
+
         try
         {
             resp = await client.PostAsync("http://127.0.0.1:9000/login", content);
@@ -135,7 +131,7 @@ public class MainMenu : MonoBehaviour
         }
         timer.Add(() =>{ infoLabel.text = "";}, 2);
     }
-
+ 
     public async void Register()
     {
         var info = new LoginRequest(usernameInput.text, passwordInput.text);
@@ -156,7 +152,7 @@ public class MainMenu : MonoBehaviour
 
     public async void Create()
     {
-        var info = new CreateRequest(username, playerNameInput.text);
+        var info = new CreateRequest(Usersession.Instance.username, playerNameInput.text);
         var content = GameManager.ObjToHttpContent(info);
         var resp = await client.PostAsync("http://127.0.0.1:9000/create", content);
         var result = resp.Content.ReadAsStringAsync().Result;
