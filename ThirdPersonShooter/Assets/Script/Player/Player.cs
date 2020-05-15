@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Shaoshuai.Core;
 using UnityEngine;
-using Shaoshuai.Core;
-using Shaoshuai.UI;
-using System;
 
 [RequireComponent(typeof(PlayerHealth))]
 public class Player : MonoBehaviour
@@ -49,6 +45,7 @@ public class Player : MonoBehaviour
         crosshair = GetComponentInChildren<Crosshair>();
         animator = GetComponentInChildren<Animator>();
         lookAtTarget = transform.Find("CameraLookTarget");
+
         if (MouseControl.LockMouse)
         {
             Cursor.visible = false;

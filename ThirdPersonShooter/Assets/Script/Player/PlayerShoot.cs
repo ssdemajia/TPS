@@ -8,6 +8,8 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] Shooter gun;
     private void Update()
     {
+        if (GameManager.Instance.IsPause)
+            return;
         if (GameManager.Instance.inputController.Fire1)
         {
             gun.Fire();

@@ -69,4 +69,12 @@ public class WeaponReload : MonoBehaviour
             return;
         ammoCounter.Display(Remain, maxAmmo);
     }
+
+    // 玩家死亡后重置状态
+    public void Reset()
+    {
+        maxAmmo = GameManager.Instance.CurrentPlayer.level * 100;
+        GameManager.Instance.CurrentPlayer.ammo = maxAmmo;
+        Reload();
+    }
 }

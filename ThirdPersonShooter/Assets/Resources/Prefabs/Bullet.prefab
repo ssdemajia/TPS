@@ -65,9 +65,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 100
   timeToLive: 3
-  damage: 1
+  damage: 10
   bullethole: {fileID: 6855759395054360822, guid: 18a1f66c44e13a64ea3fa750cb01a05b,
     type: 3}
+  blood: {fileID: 8806146606863345452, guid: 38bdc5142e8823a428caad30c67bbfad, type: 3}
 --- !u!135 &2603954329593862118
 SphereCollider:
   m_ObjectHideFlags: 0

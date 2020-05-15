@@ -29,6 +29,7 @@ public class EnemyPlayer : MonoBehaviour
 
     private void Start()
     {
+        GameManager.enemyPlayers.Add(this);
         pathFinder = GetComponent<PathFinder>();
         scanner.OnScanReady += Scanner_OnScanReady;
         Scanner_OnScanReady();
@@ -90,7 +91,7 @@ public class EnemyPlayer : MonoBehaviour
     {
         if (!EnemyHealth.IsAlive)
             return;
-        animator.SetFloat("Vertical", pathFinder.agent.velocity.z);
+        animator.SetFloat("Vertical", Math.Abs(pathFinder.agent.velocity.z));
         if (priorityTarget == null)
             return;
         transform.LookAt(priorityTarget.transform.position);

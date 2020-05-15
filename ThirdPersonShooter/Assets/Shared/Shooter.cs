@@ -20,7 +20,7 @@ public class Shooter : MonoBehaviour
     protected bool canFire;
 
     WeaponRecoil weapon; // 后座力
-    WeaponRecoil WeaponRecoil
+    public WeaponRecoil WeaponRecoil
     {
         get
         {

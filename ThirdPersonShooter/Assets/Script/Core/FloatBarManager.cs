@@ -48,17 +48,14 @@ namespace Shaoshuai.Core
             GameObject gameObject = Instantiate(prefab, healthBarRoot, false);
             FloatBar floatBar = gameObject.GetComponent<FloatBar>();
             healthbars.Add(floatBar);
-            floatBar.OnUse(trans, val, maxValue);
+            //floatBar.OnUse(trans, val, maxValue);
             return floatBar;
         }
 
         // 更新每一个生命条
         private void Update()
         {
-            foreach (var bar in healthbars)
-            {
-                bar.DoUpdate();
-            }
+            
         }
     }
 }

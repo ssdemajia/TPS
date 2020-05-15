@@ -120,6 +120,8 @@ class Player:
 
     @staticmethod
     def save(player):
+        import time
+        time.sleep(1)
         cursor = conn.cursor()
         cursor.execute('UPDATE player SET exp = ?, hp=?, level=?, ammo=? WHERE player_name = ?',
                        (player.exp, player.hp,
@@ -212,9 +214,11 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 User.create_table()
 Player.create_table()
-User.create_user('ss', '123')
-Player.create_player('ss', 'test1')
-Player.create_player('ss', 'test2')
+name_pass = [["netease1", 123], ["netease2", 123], ["netease3", 123]]
+for username, password in name_pass:
+    User.create_user(username, password)
+    Player.create_player(username, 'test1')
+    Player.create_player(username, 'test2')
 http_server = BaseHTTPServer.HTTPServer(('', PORT), RequestHandler)
 http_server.serve_forever()
 

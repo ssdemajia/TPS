@@ -54,6 +54,8 @@ public class EnemyShoot : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.IsPause)
+            return;
         if (!enemy.EnemyHealth.IsAlive)
             return;
         if (shouldFire)

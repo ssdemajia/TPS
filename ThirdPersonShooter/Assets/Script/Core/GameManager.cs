@@ -8,6 +8,8 @@ namespace Shaoshuai.Core
 {
     public class GameManager: BaseManager
     {
+        public static List<EnemyPlayer> enemyPlayers = new List<EnemyPlayer>();
+
         public Transform reticle; // 准星
         public event System.Action<Transform> OnLocalPlayerJoined; 
         public bool IsPause = false;
@@ -68,6 +70,7 @@ namespace Shaoshuai.Core
             Instance = this;
         }
 
+     
         public static HttpContent ObjToHttpContent<T>(T obj)
         {
             var value = JsonUtility.ToJson(obj);

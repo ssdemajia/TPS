@@ -48,6 +48,14 @@ public class EnemyPatrol : MonoBehaviour
             path.agent.isStopped = true;
     }
 
+    // 重新开始巡逻
+    public void ResetPatrol()
+    {
+        waypointController.SetNextWaypoint();
+        if (path.agent.isStopped)
+            path.agent.isStopped = false;
+    }
+
     // 由PathFinder导航，到达目的地，然后等待一段时间后前往下一个目的地
     private void Path_OnDestinationReach()
     {
@@ -61,4 +69,17 @@ public class EnemyPatrol : MonoBehaviour
         path.SetTarget(obj.transform.position);
     }
 
+    private void Update()
+    {
+        if (path.agent.isStopped)
+            return;
+        if (!npc.EnemyHealth.IsAlive)
+        {
+            path.agent.isStopped = true;
+        } 
+        else if (GameManager.Instance.IsPause)
+        {
+            path.agent.isStopped = true;
+        }
+    }
 }

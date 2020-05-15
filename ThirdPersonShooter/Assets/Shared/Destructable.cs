@@ -7,6 +7,7 @@ public class Destructable : MonoBehaviour
     public int hitPoints = 100;
     public event System.Action OnDeath;
     public event System.Action<float> OnDamageReceived;
+
     [SerializeField] AudioController hitAudio;
     [HideInInspector]
     public Destructable parent; // 父节点，碰撞到躯干后对角色的health扣值
@@ -47,7 +48,7 @@ public class Destructable : MonoBehaviour
                 coefficient = 2;
                 break;
             case "Bip001 Head":  // 爆头
-                coefficient = 50;
+                coefficient = 3;
                 break;
             default:
                 break;

@@ -6,8 +6,10 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] float speed = 100;
     [SerializeField] float timeToLive = 3;
-    [SerializeField] int damage = 1;
+    [SerializeField] int damage = 10;
     [SerializeField] Transform bullethole;
+    [SerializeField] Transform blood;
+
     Vector3 destination;
 
     private void Start()
@@ -44,6 +46,11 @@ public class Projectile : MonoBehaviour
         // 对Enemy角色进行扣血
         if (destructable.parent != null)
         {
+            // 喷血粒子效果
+            Transform newBleed = Instantiate(blood, destination, Quaternion.LookRotation(hitinfo.normal) * Quaternion.Euler(0, 180, 0));
+            newBleed.SetParent(hitinfo.transform);
+
+            // 扣血
             var nextDamage = damage + GameManager.Instance.CurrentPlayer.level;
             var rootDestructable = destructable.parent;
             rootDestructable.TakeDamage(nextDamage, destructable.name);
@@ -52,7 +59,6 @@ public class Projectile : MonoBehaviour
         {
             destructable.TakeDamage(damage, "");
         }
-        
     }
 
     bool isDestinationReached()

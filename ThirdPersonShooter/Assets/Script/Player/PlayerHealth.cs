@@ -6,26 +6,32 @@ using UnityEngine;
 public class PlayerHealth : Destructable
 {
     [SerializeField] HPCounter hp;
-    [SerializeField] SpawnPoint[] spawnPoints;
+    [SerializeField] SpawnPoint spawnPoint;
+    [SerializeField] WeaponReload reload;
+    CharacterController character;
 
     private void Start()
     {
+        character = GetComponent<CharacterController>();
         hitPoints = GameManager.Instance.CurrentPlayer.level * 100;
         damageTaken = hitPoints - GameManager.Instance.CurrentPlayer.hp;
     }
-    //[SerializeField] Ragdoll ragdoll;
     void SpawnAtNewPoint()
     {
-        int index = Random.Range(0, spawnPoints.Length);
-        transform.position = spawnPoints[index].transform.position;
-        transform.rotation = spawnPoints[index].transform.rotation;
+        // 因为CharacterController会再Update里更新，所以这里关闭它
+        character.enabled = false;
+        transform.position = spawnPoint.transform.position;
+        transform.rotation = spawnPoint.transform.rotation;
+        character.enabled = true;
     }
 
     public override void Die()
     {
         base.Die();
-        //SpawnAtNewPoint();
-        //ragdoll.EnableRagdoll(false);
+        SpawnAtNewPoint();
+        Reset();
+        reload.Reset();
+        
     }
 
     private void LateUpdate()

@@ -49,7 +49,13 @@ public class EscapeMenu : MonoBehaviour
         {
             infoLabel.text = "保存失败";
         }
+
         EscapeMenuPanel.SetActive(true);
+        GameManager.Instance.Timer.Add(() =>
+        {
+            infoLabel.text = "";
+        }, 2);
+        
     }
 
     public void ClickClose()
